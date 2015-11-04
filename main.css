@@ -1,4 +1,27 @@
-#map { height: 600px; }
+body {
+	background-color: black;
+	font-family: Arial, sans-serif;
+	padding: 0;
+	margin: 0;
+}
+
+
+.leaflet-clickable {
+	display:none;
+}
+
+ul {
+	display: inline; 
+	padding-left: 20px;
+}
+
+ul li {
+	padding-left: 20px;
+	font-size: 12px;
+}
+
+#map { height: 600px; 
+	margin: 0;}
 
 //customizing leaflet styling
 .leaflet-popup-tip {

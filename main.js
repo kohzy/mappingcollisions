@@ -1,70 +1,52 @@
 var map = L.map('map').setView([40.742045, -73.995328],13);
+var actualTileLayer = L.tileLayer.provider('Hydda.Base').addTo(map);
 
-var actualTileLayer = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-}).addTo(map);
-
-var cities = [];
-var citiesOverlay = L.d3SvgOverlay(function(sel,proj){
-	
-  var minLogPop = Math.log2(d3.min(cities,function(d){return d.population;}));
-  var citiesUpd = sel.selectAll('circle').data(cities);
-  citiesUpd.enter()
-    .append('circle')
-    .attr('r',function(d){return Math.log2(d.population) - minLogPop + 2;})
-    .attr('cx',function(d){return proj.latLngToLayerPoint(d.latLng).x;})
-    .attr('cy',function(d){return proj.latLngToLayerPoint(d.latLng).y;})
-    .attr('stroke','black')
-    .attr('stroke-width',1)
-    .attr('fill',function(d){return (d.place == 'city') ? "red" : "blue";})
-    .attr('class', 'circleHover');
-});
-
-// d3.csv("swiss-cities.csv",function(data){
-//   cities = data.map(function(d){
-//     d.latLng = [+d.lat,+d.lng];
-//     d.population = (d.population == '') ? 2000 : +d.population; //NAs
-//     return d;
-//   });
-//   citiesOverlay.addTo(map);
-// });
-
+//parse the JSON Data
 var jsonData;
 var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json', function(data) {
 	jsonData = data;
 
+	//iterature through JSON data and draw dots 
 	for (var i=0; i< jsonData.length; i++) {
-		if (jsonData[i].location && jsonData[i].location) { 			
-			L.circle([parseFloat(jsonData[i].location.latitude),parseFloat(jsonData[i].location.longitude)],40,{
-				color: 	
-				function() {
-						if(parseInt(jsonData[i].number_of_persons_killed) == 0) {
-							return 'red';
-						} else {
-							return 'red';
-						}
-					},
+		var dotColor = 'red';
+		var numberInjured = parseInt(jsonData[i].number_of_persons_injured);
+		var collisionTime = parseFloat(jsonData[i].time);
+		var firstvehicle = jsonData[i].vehicle_type_code1;
+		var secondvehicle;
+		if(jsonData[i].vehicle_type_code2 != null) {
+			secondvehicle = jsonData[i].vehicle_type_code2;} 
+			else { secondvehicle = "UNKNOWN VEHICLE"};
+		if( numberInjured >= 2) {
+			dotColor = 'red';
+			} else if (numberInjured  == 1) {
+			dotColor = '#ff7800';
+			} else if (numberInjured  == 0) {
+			dotColor = 'yellow';
+			}
+
+		if (jsonData[i].location && jsonData[i].location) {
+			var latitude = parseFloat(jsonData[i].location.latitude);
+			var longitude = parseFloat(jsonData[i].location.longitude);
+
+			L.circle([ latitude,longitude],30*(numberInjured+1),{
+				color: 	dotColor,
 				weight: 1,
 				opacity: 0.7,
-				fillColor: 'red',
-				// function() {
-				// 		if(parseInt(jsonData[i].number_of_persons_killed) == 0) {
-				// 			return 'red';
-				// 		} else {
-				// 			return 'red';
-				// 		}
-				// 	},
+				fillColor: dotColor,
 				fillOpacity: 0.7,
 			}).addTo(map)
-			    .bindPopup("<b>Reason:  </b>" + jsonData[i].contributing_factor_vehicle_1 + "<br> <b>Hello</b>");	
+			    .bindPopup("<b>Reason:  </b>" + jsonData[i].contributing_factor_vehicle_1 + "<br> <b># of Injuries: </b>" + numberInjured + "<br> <b>Collision between </b>" + firstvehicle + " and " + secondvehicle + "<br> <b>Date: </b>" + jsonData[i].date + "<br> <b>Time: </b>" + collisionTime);	
 			} else {			
 			}
 	}
 });
 
+//Jquery Map Animations
 $( "#map").mouseenter(function() {
 	actualTileLayer.setOpacity(0.3);
+	$(".leaflet-clickable").toggle("display");
 	$(this).mouseleave(function() {
 		actualTileLayer.setOpacity(1);
+		$(".leaflet-clickable").toggle("display");
 	})
 })
