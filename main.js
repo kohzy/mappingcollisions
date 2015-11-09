@@ -50,3 +50,10 @@ $( "#map").mouseenter(function() {
 		$(".leaflet-clickable").toggle("display");
 	})
 })
+
+
+
+
+
+
+

@@ -1,3 +1,7 @@
+html {
+		cursor: crosshair;
+}
+
 body {
 	background-color: black;
 	font-family: Arial, sans-serif;
