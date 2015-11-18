@@ -13,6 +13,9 @@ body {
 .leaflet-clickable {
 	display:none;
 }
+/*.leaflet-marker-shadow {
+	display:none;
+}*/
 
 .leaflet-bottom {
 	display:none;

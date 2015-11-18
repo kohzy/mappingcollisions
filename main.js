@@ -5,52 +5,178 @@ myRec.interimResults = true; // allow partial recognition (faster, less accurate
 
 
 //create a new Leaflet map and set the initial view when the map loads and the initial zoom
-var map = L.map('map').setView([40.742045, -73.995328],13);
+var nycmap = L.map('map').setView([40.742045, -73.995328],13);
 
 //Set the choice of map style 
-var actualTileLayer = L.tileLayer.provider('Hydda.Base').addTo(map);
+var actualTileLayer = L.tileLayer.provider('Hydda.Base').addTo(nycmap);
 
 //parse the JSON Data we get from the NYC API URL
 var jsonData;
+var manhattanArray = [];
+var queensArray = [];
+var bronxArray = [];
+var brooklynArray = [];
 var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json', function(data) {
 		jsonData = data;
 
 		//iterate through each line of JSON data and draw dots 
 		for (var i=0; i< jsonData.length; i++) {
-			var dotColor = 'red';
-			var numberInjured = parseInt(jsonData[i].number_of_persons_injured);
-			var collisionTime = parseFloat(jsonData[i].time);
-			var firstvehicle = jsonData[i].vehicle_type_code1;
-			var secondvehicle;
-			if(jsonData[i].vehicle_type_code2 != null) {
-				secondvehicle = jsonData[i].vehicle_type_code2;} 
-				else { secondvehicle = "UNKNOWN VEHICLE"};
-			if( numberInjured >= 2) {
-				dotColor = 'red';
-				} else if (numberInjured  == 1) {
-				dotColor = '#ff7800';
-				} else if (numberInjured  == 0) {
-				dotColor = 'yellow';
+			if(jsonData[i].borough == "MANHATTAN") {
+				var dotColor = 'red';
+				var numberInjured = parseInt(jsonData[i].number_of_persons_injured);
+				var collisionTime = parseFloat(jsonData[i].time);
+				var firstvehicle = jsonData[i].vehicle_type_code1;
+				var secondvehicle;
+				if(jsonData[i].vehicle_type_code2 != null) {
+					secondvehicle = jsonData[i].vehicle_type_code2;} 
+					else { secondvehicle = "UNKNOWN VEHICLE"};
+				if( numberInjured >= 2) {
+					dotColor = 'red';
+					} else if (numberInjured  == 1) {
+					dotColor = '#ff7800';
+					} else if (numberInjured  == 0) {
+					dotColor = 'yellow';
+					}
+
+				//if data point has location data (because some data points don't have location data), load the long and lat of that entry
+				if (jsonData[i].location) {
+					var latitude = parseFloat(jsonData[i].location.latitude);
+					var longitude = parseFloat(jsonData[i].location.longitude);
+
+					//Draw that particular circle with diameter determined by numberInjured
+					manhattanArray.push(L.circle([ latitude,longitude],30*(numberInjured+1),{
+						color: 	dotColor,
+						weight: 1,
+						opacity: 0.7,
+						fillColor: dotColor,
+						fillOpacity: 0.7,
+						className: "manhattan-array"
+					}).addTo(nycmap)
+					    .bindPopup("<b>Reason:  </b>" + jsonData[i].contributing_factor_vehicle_1 + "<br> <b># of Injuries: </b>" + numberInjured + "<br> <b>Collision between </b>" + firstvehicle + " and " + secondvehicle + "<br> <b>Date: </b>" + jsonData[i].date + "<br> <b>Time: </b>" + collisionTime)
+					    );	
+					} else {			
+					}
 				}
+		}
+		for (var i=0; i< jsonData.length; i++) {
+			if(jsonData[i].borough == "QUEENS") {
+				var dotColor = 'red';
+				var numberInjured = parseInt(jsonData[i].number_of_persons_injured);
+				var collisionTime = parseFloat(jsonData[i].time);
+				var firstvehicle = jsonData[i].vehicle_type_code1;
+				var secondvehicle;
+				if(jsonData[i].vehicle_type_code2 != null) {
+					secondvehicle = jsonData[i].vehicle_type_code2;} 
+					else { secondvehicle = "UNKNOWN VEHICLE"};
+				if( numberInjured >= 2) {
+					dotColor = 'red';
+					} else if (numberInjured  == 1) {
+					dotColor = '#ff7800';
+					} else if (numberInjured  == 0) {
+					dotColor = 'yellow';
+					}
 
-			//if data point has location data (because some data points don't have location data), load the long and lat of that entry
-			if (jsonData[i].location) {
-				var latitude = parseFloat(jsonData[i].location.latitude);
-				var longitude = parseFloat(jsonData[i].location.longitude);
+				//if data point has location data (because some data points don't have location data), load the long and lat of that entry
+				if (jsonData[i].location) {
+					var latitude = parseFloat(jsonData[i].location.latitude);
+					var longitude = parseFloat(jsonData[i].location.longitude);
 
-				//Draw that particular circle with diameter determined by numberInjured
-				L.circle([ latitude,longitude],30*(numberInjured+1),{
-					color: 	dotColor,
-					weight: 1,
-					opacity: 0.7,
-					fillColor: dotColor,
-					fillOpacity: 0.7,
-				}).addTo(map)
-				    .bindPopup("<b>Reason:  </b>" + jsonData[i].contributing_factor_vehicle_1 + "<br> <b># of Injuries: </b>" + numberInjured + "<br> <b>Collision between </b>" + firstvehicle + " and " + secondvehicle + "<br> <b>Date: </b>" + jsonData[i].date + "<br> <b>Time: </b>" + collisionTime);	
-				} else {			
+					//Draw that particular circle with diameter determined by numberInjured
+					queensArray.push(L.circle([ latitude,longitude],30*(numberInjured+1),{
+						color: 	dotColor,
+						stroke: true,
+						weight: 1,
+						opacity: 0.7,
+						fillColor: dotColor,
+						fillOpacity: 0.7,
+						className: "queens-array"
+					}).addTo(nycmap)
+					    .bindPopup("<b>Reason:  </b>" + jsonData[i].contributing_factor_vehicle_1 + "<br> <b># of Injuries: </b>" + numberInjured + "<br> <b>Collision between </b>" + firstvehicle + " and " + secondvehicle + "<br> <b>Date: </b>" + jsonData[i].date + "<br> <b>Time: </b>" + collisionTime)
+					    );	
+					} else {			
+					}
+				}
+		}
+		for (var i=0; i< jsonData.length; i++) {
+			if(jsonData[i].borough == "BROOKLYN") {
+				var dotColor = 'red';
+				var numberInjured = parseInt(jsonData[i].number_of_persons_injured);
+				var collisionTime = parseFloat(jsonData[i].time);
+				var firstvehicle = jsonData[i].vehicle_type_code1;
+				var secondvehicle;
+				if(jsonData[i].vehicle_type_code2 != null) {
+					secondvehicle = jsonData[i].vehicle_type_code2;} 
+					else { secondvehicle = "UNKNOWN VEHICLE"};
+				if( numberInjured >= 2) {
+					dotColor = 'red';
+					} else if (numberInjured  == 1) {
+					dotColor = '#ff7800';
+					} else if (numberInjured  == 0) {
+					dotColor = 'yellow';
+					}
+
+				//if data point has location data (because some data points don't have location data), load the long and lat of that entry
+				if (jsonData[i].location) {
+					var latitude = parseFloat(jsonData[i].location.latitude);
+					var longitude = parseFloat(jsonData[i].location.longitude);
+
+					//Draw that particular circle with diameter determined by numberInjured
+					brooklynArray.push(L.circle([ latitude,longitude],30*(numberInjured+1),{
+						color: 	dotColor,
+						stroke: true,
+						weight: 1,
+						opacity: 0.7,
+						fillColor: dotColor,
+						fillOpacity: 0.7,
+						className: "brooklyn-array"
+					}).addTo(nycmap)
+					    .bindPopup("<b>Reason:  </b>" + jsonData[i].contributing_factor_vehicle_1 + "<br> <b># of Injuries: </b>" + numberInjured + "<br> <b>Collision between </b>" + firstvehicle + " and " + secondvehicle + "<br> <b>Date: </b>" + jsonData[i].date + "<br> <b>Time: </b>" + collisionTime)
+					    );	
+					} else {			
+					}
+				}
+		}
+		for (var i=0; i< jsonData.length; i++) {
+			if(jsonData[i].borough == "BRONX") {
+				var dotColor = 'red';
+				var numberInjured = parseInt(jsonData[i].number_of_persons_injured);
+				var collisionTime = parseFloat(jsonData[i].time);
+				var firstvehicle = jsonData[i].vehicle_type_code1;
+				var secondvehicle;
+				if(jsonData[i].vehicle_type_code2 != null) {
+					secondvehicle = jsonData[i].vehicle_type_code2;} 
+					else { secondvehicle = "UNKNOWN VEHICLE"};
+				if( numberInjured >= 2) {
+					dotColor = 'red';
+					} else if (numberInjured  == 1) {
+					dotColor = '#ff7800';
+					} else if (numberInjured  == 0) {
+					dotColor = 'yellow';
+					}
+
+				//if data point has location data (because some data points don't have location data), load the long and lat of that entry
+				if (jsonData[i].location) {
+					var latitude = parseFloat(jsonData[i].location.latitude);
+					var longitude = parseFloat(jsonData[i].location.longitude);
+
+					//Draw that particular circle with diameter determined by numberInjured
+					bronxArray.push(L.circle([ latitude,longitude],30*(numberInjured+1),{
+						color: 	dotColor,
+						stroke: true,
+						weight: 1,
+						opacity: 0.7,
+						fillColor: dotColor,
+						fillOpacity: 0.7,
+						className: "bronx-array"
+					}).addTo(nycmap)
+					    .bindPopup("<b>Reason:  </b>" + jsonData[i].contributing_factor_vehicle_1 + "<br> <b># of Injuries: </b>" + numberInjured + "<br> <b>Collision between </b>" + firstvehicle + " and " + secondvehicle + "<br> <b>Date: </b>" + jsonData[i].date + "<br> <b>Time: </b>" + collisionTime)
+					    );	
+					} else {			
+					}
 				}
 		}
 });
+
 
 function setup() {
 	// instructions:
@@ -76,28 +202,36 @@ function parseResult()
   // recognition system will often append words into phrases.
   // so hack here is to only use the last word:
   var mostrecentword = myRec.resultString.split(' ').pop();
-  if(mostrecentword.indexOf("map")!==-1) {
+  if(mostrecentword.indexOf("Manhattan")!==-1) {
 		actualTileLayer.setOpacity(0.3);
-		if($(".leaflet-clickable").css("display") == "none") {
-			$(".leaflet-clickable").toggle("display");
+		if($(".manhattan-array").css("display") == "none") {
+			$(".manhattan-array").toggle("display");
+		}
+	}
+  else if(mostrecentword.indexOf("Queens")!==-1) {
+		actualTileLayer.setOpacity(0.3);
+		if($(".queens-array").css("display") == "none") {
+			$(".queens-array").toggle("display");
+		}
+	}
+  else if(mostrecentword.indexOf("Bronx")!==-1) {
+		actualTileLayer.setOpacity(0.3);
+		if($(".bronx-array").css("display") == "none") {
+			$(".bronx-array").toggle("display");
+		}
+	}
+  else if(mostrecentword.indexOf("Brooklyn")!==-1) {
+		actualTileLayer.setOpacity(0.3);
+		if($(".brooklyn-array").css("display") == "none") {
+			$(".brooklyn-array").toggle("display");
 		}
 	}
   else if(mostrecentword.indexOf("clear")!==-1) {
   		actualTileLayer.setOpacity(1);
-		if($(".leaflet-clickable").css("display") != "none") {
+ 		if($(".leaflet-clickable").css("display") != "none") {
 			$(".leaflet-clickable").toggle("display");
 		}
 	}
-  else if(mostrecentword.indexOf("up")!==-1) { dx=0;dy=-1; }
-  else if(mostrecentword.indexOf("down")!==-1) { dx=0;dy=1; }
-  else if(mostrecentword.indexOf("stop")!==-1) {dx=0;dy=0; }
-  console.log(mostrecentword);
- if(mostrecentword.indexOf("cash")!==-1) {dx=1;dy=1; }
-  console.log(mostrecentword); if(mostrecentword.indexOf("jump")!==-1) {dx=1;dy=-1; }
-  console.log(mostrecentword);
- if(mostrecentword.indexOf("duck")!==-1) {dx=-1;dy=1; }
-  console.log(mostrecentword);
-  if(mostrecentword.indexOf("pop")!==-1) {dx=-1;dy=-1; }
   console.log(mostrecentword);
 }
 
