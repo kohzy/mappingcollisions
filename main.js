@@ -5,7 +5,10 @@
 
 
 //create a new Leaflet map and set the initial view when the map loads and the initial zoom
-var nycmap = L.map('map').setView([40.722045, -73.945328],13);
+var nycmap = L.map('map', {
+				fullscreenControl: true
+				}
+				).setView([40.722045, -73.945328],13);
 
 //Set the choice of map style 
 var actualTileLayer = L.tileLayer.provider('Hydda.Base').addTo(nycmap);
@@ -35,7 +38,7 @@ var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json',
 					} else if (numberInjured  == 1) {
 					dotColor = '#ff7800';
 					} else if (numberInjured  == 0) {
-					dotColor = 'yellow';
+					dotColor = '#ffea00';
 					}
 
 				//if data point has location data (because some data points don't have location data), load the long and lat of that entry
@@ -44,7 +47,7 @@ var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json',
 					var longitude = parseFloat(jsonData[i].location.longitude);
 
 					//Draw that particular circle with diameter determined by numberInjured
-					manhattanArray.push(L.circle([ latitude,longitude],30*(numberInjured+1),{
+					manhattanArray.push(L.circle([ latitude,longitude],40,{
 						color: 	dotColor,
 						weight: 1,
 						opacity: 0.7,
@@ -71,7 +74,7 @@ var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json',
 					} else if (numberInjured  == 1) {
 					dotColor = '#ff7800';
 					} else if (numberInjured  == 0) {
-					dotColor = 'yellow';
+					dotColor = '#ffea00';
 					}
 
 				//if data point has location data (because some data points don't have location data), load the long and lat of that entry
@@ -80,7 +83,7 @@ var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json',
 					var longitude = parseFloat(jsonData[i].location.longitude);
 
 					//Draw that particular circle with diameter determined by numberInjured
-					queensArray.push(L.circle([ latitude,longitude],30*(numberInjured+1),{
+					queensArray.push(L.circle([ latitude,longitude],40,{
 						color: 	dotColor,
 						stroke: true,
 						weight: 1,
@@ -108,7 +111,7 @@ var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json',
 					} else if (numberInjured  == 1) {
 					dotColor = '#ff7800';
 					} else if (numberInjured  == 0) {
-					dotColor = 'yellow';
+					dotColor = '#ffea00';
 					}
 
 				//if data point has location data (because some data points don't have location data), load the long and lat of that entry
@@ -117,7 +120,7 @@ var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json',
 					var longitude = parseFloat(jsonData[i].location.longitude);
 
 					//Draw that particular circle with diameter determined by numberInjured
-					brooklynArray.push(L.circle([ latitude,longitude],30*(numberInjured+1),{
+					brooklynArray.push(L.circle([ latitude,longitude],40,{
 						color: 	dotColor,
 						stroke: true,
 						weight: 1,
@@ -145,7 +148,7 @@ var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json',
 					} else if (numberInjured  == 1) {
 					dotColor = '#ff7800';
 					} else if (numberInjured  == 0) {
-					dotColor = 'yellow';
+					dotColor = '#ffea00';
 					}
 
 				//if data point has location data (because some data points don't have location data), load the long and lat of that entry
@@ -154,7 +157,7 @@ var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json',
 					var longitude = parseFloat(jsonData[i].location.longitude);
 
 					//Draw that particular circle with diameter determined by numberInjured
-					bronxArray.push(L.circle([ latitude,longitude],30*(numberInjured+1),{
+					bronxArray.push(L.circle([ latitude,longitude],40,{
 						color: 	dotColor,
 						stroke: true,
 						weight: 1,
@@ -165,7 +168,7 @@ var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json',
 					}).addTo(nycmap)
 					    .bindPopup("<b>Reason:  </b>" + jsonData[i].contributing_factor_vehicle_1 + "<br> <b># of Injuries: </b>" + numberInjured + "<br> <b>Collision between </b>" + firstvehicle + " and " + secondvehicle + "<br> <b>Date: </b>" + jsonData[i].date + "<br> <b>Time: </b>" + collisionTime)
 					    );	
-					} else {			
+					} else {
 					}
 			}
 		}
@@ -189,7 +192,7 @@ $("#manhattanButton").click(function() {
 		&& $(".queens-array").css("display") == "none"
 		&& $(".bronx-array").css("display") == "none"
 		) {
-		actualTileLayer.setOpacity(0.8);
+		actualTileLayer.setOpacity(0.9);
 	}
 	else if ($(".manhattan-array").css("display") !== "none"
 		&& $(".brooklyn-array").css("display") == "none"
@@ -208,7 +211,7 @@ $("#brooklynButton").click(function() {
 		&& $(".queens-array").css("display") == "none"
 		&& $(".bronx-array").css("display") == "none"
 		) {
-		actualTileLayer.setOpacity(0.8);
+		actualTileLayer.setOpacity(0.9);
 	}
 	else if ($(".manhattan-array").css("display") == "none"
 		&& $(".brooklyn-array").css("display") !== "none"
@@ -227,7 +230,7 @@ $("#bronxButton").click(function() {
 		&& $(".queens-array").css("display") == "none"
 		&& $(".bronx-array").css("display") == "none"
 		) {
-		actualTileLayer.setOpacity(0.8);
+		actualTileLayer.setOpacity(0.9);
 	}
 	else if ($(".manhattan-array").css("display") == "none"
 		&& $(".brooklyn-array").css("display") == "none"
@@ -246,7 +249,7 @@ $("#queensButton").click(function() {
 		&& $(".queens-array").css("display") == "none"
 		&& $(".bronx-array").css("display") == "none"
 		) {
-		actualTileLayer.setOpacity(0.8);
+		actualTileLayer.setOpacity(0.9);
 	}
 	else if ($(".manhattan-array").css("display") == "none"
 		&& $(".brooklyn-array").css("display") == "none"

@@ -14,9 +14,11 @@
 	<script src="//cdnjs.cloudflare.com/ajax/libs/p5.js/0.4.12/p5.min.js"></script>	
 	<script src="lib/p5.speech.js"></script>	
 	<script src="lib/bouncemarker.js"></script>
+	<script src='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.2/Leaflet.fullscreen.min.js'></script>
 	<link rel="stylesheet" href="lib/leaflet/leaflet.css" />
 	<link rel="stylesheet" href="http://openlayers.org/en/v3.10.1/css/ol.css" />
 	<link rel="stylesheet" type="text/css" href="main.css">
+	<link href='//api.tiles.mapbox.com/mapbox.js/plugins/leaflet-fullscreen/v0.0.2/leaflet.fullscreen.css' rel='stylesheet' />
 </head>
 
 
@@ -26,8 +28,9 @@
 		<table>
 			<tr>
 				<td>
-				<div class="legendContentCell">					
+				<div class="legendContentCell" id="titleText">					
 					<h1>Motor Collisions in NYC</h1>
+					<p style="font-family: serif; font-style: italic;">between ___ and ____</p>
 				</div>
 				</td>
 			</tr>
@@ -67,9 +70,9 @@
 				<td>
 				<div class="legendContentCell">
 						<ul>
-							<li style="color: yellow;">Yellow = 0 persons injured.</li>
-							<li style="color: #ff7800;">Orange = 1 persons injured.</li>
-							<li style="color: red;">Red = More than 2 persons injured.</li>
+							<li style="color: #ffea00;">0 persons injured</li>
+							<li style="color: #ff7800;">1 persons injured</li>
+							<li style="color: red;">>2 persons injured</li>
 						</ul>
 					</div>
 				</td>
@@ -85,6 +88,13 @@
 				<td>
 				<div class="legendContentCell">
 					See the <span class="highlightText">date</span>, <span class="highlightText">time</span>, <span class="highlightText">vehicle type</span>, <span class="highlightText">reason for collision</span>, and <span class="highlightText">number of injuries</span> for each collision.
+				</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<div class="footerCell">
+					Made by <a href="http://portfolio.kohzy.com" style="color: white;">Kohzy</a>. (2015)	
 				</div>
 				</td>
 			</tr>
