@@ -21,16 +21,77 @@
 
 
 <body>
+
+	<div id="legend">
+		<table>
+			<tr>
+				<td>
+				<div class="legendContentCell">					
+					<h1>Motor Collisions in NYC</h1>
+				</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="legendTitleCell">
+					1. Select a borough
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<div class="legendContentCell">
+					<button id="manhattanButton">
+						Manhattan
+					</button>
+					<button id="brooklynButton">
+						Brooklyn
+					</button>
+					<button id="bronxButton">
+						Bronx
+					</button>
+					<button id="queensButton">
+						Queens
+					</button>
+				</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="legendTitleCell">
+					2. Survey the markers
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<div class="legendContentCell">
+						<ul>
+							<li style="color: yellow;">Yellow = 0 persons injured.</li>
+							<li style="color: #ff7800;">Orange = 1 persons injured.</li>
+							<li style="color: red;">Red = More than 2 persons injured.</li>
+						</ul>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="legendTitleCell">
+					3. Click on each marker for details
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+				<div class="legendContentCell">
+					See the <span class="highlightText">date</span>, <span class="highlightText">time</span>, <span class="highlightText">vehicle type</span>, <span class="highlightText">reason for collision</span>, and <span class="highlightText">number of injuries</span> for each collision.
+				</div>
+				</td>
+			</tr>
+		</table>
+	</div>
 	<div id="map"></div>
 	<script type="text/javascript" src="main.js"></script>
-	<div id="legend" style="margin-top: 20px; margin-left: 20px;">
-		<h2 style="color: white; display: inline;">Motor Collisions in NYC</h2>
-		<ul>
-			<li style="color: yellow; display: inline;">Yellow = 0 persons injured.</li>
-			<li style="color: #ff7800; display: inline;">Orange = 1 persons injured.</li>
-			<li style="color: red; display: inline;">Red = More than 2 persons injured.</li>
-		</ul>
-	</div>
 </body>
 
 
