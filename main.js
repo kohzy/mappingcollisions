@@ -192,7 +192,7 @@ $("#manhattanButton").click(function() {
 		&& $(".queens-array").css("display") == "none"
 		&& $(".bronx-array").css("display") == "none"
 		) {
-		actualTileLayer.setOpacity(0.9);
+		actualTileLayer.setOpacity(0.8);
 	}
 	else if ($(".manhattan-array").css("display") !== "none"
 		&& $(".brooklyn-array").css("display") == "none"
@@ -211,7 +211,7 @@ $("#brooklynButton").click(function() {
 		&& $(".queens-array").css("display") == "none"
 		&& $(".bronx-array").css("display") == "none"
 		) {
-		actualTileLayer.setOpacity(0.9);
+		actualTileLayer.setOpacity(0.8);
 	}
 	else if ($(".manhattan-array").css("display") == "none"
 		&& $(".brooklyn-array").css("display") !== "none"
@@ -230,7 +230,7 @@ $("#bronxButton").click(function() {
 		&& $(".queens-array").css("display") == "none"
 		&& $(".bronx-array").css("display") == "none"
 		) {
-		actualTileLayer.setOpacity(0.9);
+		actualTileLayer.setOpacity(0.8);
 	}
 	else if ($(".manhattan-array").css("display") == "none"
 		&& $(".brooklyn-array").css("display") == "none"
@@ -249,7 +249,7 @@ $("#queensButton").click(function() {
 		&& $(".queens-array").css("display") == "none"
 		&& $(".bronx-array").css("display") == "none"
 		) {
-		actualTileLayer.setOpacity(0.9);
+		actualTileLayer.setOpacity(0.8);
 	}
 	else if ($(".manhattan-array").css("display") == "none"
 		&& $(".brooklyn-array").css("display") == "none"
