@@ -12,4 +12,6 @@ Of course, there's always room for improvement. Here are some things I plan on d
 * Optimizing for mobile
 * Cleaning up collision information in popup
 * Add animations to markers
+* Enhance filtering to filter datapoints along different axes
 * Add d3 chart overlay
+
