@@ -22,6 +22,10 @@ var queensArray = [];
 var bronxArray = [];
 var brooklynArray = [];
 
+//dateNames for popup date information
+var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+var dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json', function(data) {
 		jsonData = data;
@@ -31,10 +35,24 @@ var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json',
 			if(jsonData[i].borough == "MANHATTAN") {
 				var dotColor = 'red';
 				var numberInjured = parseInt(jsonData[i].number_of_persons_injured);
-				var collisionTime = parseFloat(jsonData[i].time);
+				var collisionTime = jsonData[i].time;
+				var collisionHour = parseInt(collisionTime.split(":")[0]);
+				var collisionHourNorm = collisionHour;
+				if (collisionHour > 12) {
+					collisionHourNorm = collisionHour - 12;
+				}
+				var amPm = "AM";
+				if (collisionHour >= 12) {
+					amPm = "PM";
+				}
+				var collisionMin = collisionTime.split(":")[1];
 				var firstvehicle = jsonData[i].vehicle_type_code1;
 				var secondvehicle;
-				var collisionDate = jsonData[i].date.slice(0,jsonData[i].date.indexOf("T"));
+				var collisionDate = new Date(jsonData[i].date);
+				var collisionDayOfWeek = dayNames[collisionDate.getDay()];
+				var collisionMonth = monthNames[collisionDate.getMonth()];
+				var collisionDay = collisionDate.getDate();
+				var collisionYear = collisionDate.getFullYear();
 				if(jsonData[i].vehicle_type_code2 != null) {
 					secondvehicle = jsonData[i].vehicle_type_code2;} 
 					else { secondvehicle = "UNKNOWN VEHICLE"};
@@ -60,7 +78,14 @@ var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json',
 						fillOpacity: 0.7,
 						className: "manhattan-array"
 					}).addTo(nycmap)
-					    .bindPopup("<b>Reason:  </b>" + jsonData[i].contributing_factor_vehicle_1 + "<br> <b># of Injuries: </b>" + numberInjured + "<br> <b>Collision between </b>" + firstvehicle + " and " + secondvehicle + "<br> <b>Date: </b>" + jsonData[i].date + "<br> <b>Time: </b>" + collisionTime)
+					    .bindPopup("<b>Date: </b>" + 
+					    	collisionDayOfWeek + ", " + collisionMonth + " " + collisionDay + ", " +
+					    	collisionYear + "<br style='line-height: 1.5em'> <b>Time: </b>" + collisionHourNorm +":" + 
+					    	collisionMin + amPm +
+					    	"<br style='line-height: 1.5em'> <b>Reason:  </b>" + jsonData[i].contributing_factor_vehicle_1 + 
+					    	"<br style='line-height: 1.5em'> <b>No. of Injuries: </b>" + numberInjured + 
+					    	"<br style='line-height: 1.5em'> <b>Collision between </b>" + firstvehicle + 
+					    	" and " + secondvehicle)
 					    );	
 					} else {			
 					}
@@ -68,9 +93,24 @@ var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json',
 			else if (jsonData[i].borough == "QUEENS") {
 				var dotColor = 'red';
 				var numberInjured = parseInt(jsonData[i].number_of_persons_injured);
-				var collisionTime = parseFloat(jsonData[i].time);
+				var collisionTime = jsonData[i].time;
+				var collisionHour = parseInt(collisionTime.split(":")[0]);
+				var collisionHourNorm = collisionHour;
+				if (collisionHour > 12) {
+					collisionHourNorm = collisionHour - 12;
+				}
+				var amPm = "AM";
+				if (collisionHour >= 12) {
+					amPm = "PM";
+				}
+				var collisionMin = collisionTime.split(":")[1];
 				var firstvehicle = jsonData[i].vehicle_type_code1;
 				var secondvehicle;
+				var collisionDate = new Date(jsonData[i].date);
+				var collisionDayOfWeek = dayNames[collisionDate.getDay()];
+				var collisionMonth = monthNames[collisionDate.getMonth()];
+				var collisionDay = collisionDate.getDate();
+				var collisionYear = collisionDate.getFullYear();
 				if(jsonData[i].vehicle_type_code2 != null) {
 					secondvehicle = jsonData[i].vehicle_type_code2;} 
 					else { secondvehicle = "UNKNOWN VEHICLE"};
@@ -97,7 +137,14 @@ var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json',
 						fillOpacity: 0.7,
 						className: "queens-array"
 					}).addTo(nycmap)
-					    .bindPopup("<b>Reason:  </b>" + jsonData[i].contributing_factor_vehicle_1 + "<br> <b># of Injuries: </b>" + numberInjured + "<br> <b>Collision between </b>" + firstvehicle + " and " + secondvehicle + "<br> <b>Date: </b>" + jsonData[i].date + "<br> <b>Time: </b>" + collisionTime)
+					    .bindPopup("<b>Date: </b>" + 
+					    	collisionDayOfWeek + ", " + collisionMonth + " " + collisionDay + ", " +
+					    	collisionYear + "<br style='line-height: 1.5em'> <b>Time: </b>" + collisionHourNorm +":" + 
+					    	collisionMin + amPm +
+					    	"<br style='line-height: 1.5em'> <b>Reason:  </b>" + jsonData[i].contributing_factor_vehicle_1 + 
+					    	"<br style='line-height: 1.5em'> <b>No. of Injuries: </b>" + numberInjured + 
+					    	"<br style='line-height: 1.5em'> <b>Collision between </b>" + firstvehicle + 
+					    	" and " + secondvehicle)
 					    );	
 					} else {			
 					}
@@ -105,9 +152,24 @@ var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json',
 			else if(jsonData[i].borough == "BROOKLYN") {
 				var dotColor = 'red';
 				var numberInjured = parseInt(jsonData[i].number_of_persons_injured);
-				var collisionTime = parseFloat(jsonData[i].time);
+				var collisionTime = jsonData[i].time;
+				var collisionHour = parseInt(collisionTime.split(":")[0]);
+				var collisionHourNorm = collisionHour;
+				if (collisionHour > 12) {
+					collisionHourNorm = collisionHour - 12;
+				}
+				var amPm = "AM";
+				if (collisionHour >= 12) {
+					amPm = "PM";
+				}
+				var collisionMin = collisionTime.split(":")[1];
 				var firstvehicle = jsonData[i].vehicle_type_code1;
 				var secondvehicle;
+				var collisionDate = new Date(jsonData[i].date);
+				var collisionDayOfWeek = dayNames[collisionDate.getDay()];
+				var collisionMonth = monthNames[collisionDate.getMonth()];
+				var collisionDay = collisionDate.getDate();
+				var collisionYear = collisionDate.getFullYear();
 				if(jsonData[i].vehicle_type_code2 != null) {
 					secondvehicle = jsonData[i].vehicle_type_code2;} 
 					else { secondvehicle = "UNKNOWN VEHICLE"};
@@ -134,7 +196,14 @@ var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json',
 						fillOpacity: 0.7,
 						className: "brooklyn-array"
 					}).addTo(nycmap)
-					    .bindPopup("<b>Reason:  </b>" + jsonData[i].contributing_factor_vehicle_1 + "<br> <b># of Injuries: </b>" + numberInjured + "<br> <b>Collision between </b>" + firstvehicle + " and " + secondvehicle + "<br> <b>Date: </b>" + jsonData[i].date + "<br> <b>Time: </b>" + collisionTime)
+					    .bindPopup("<b>Date: </b>" + 
+					    	collisionDayOfWeek + ", " + collisionMonth + " " + collisionDay + ", " +
+					    	collisionYear + "<br style='line-height: 1.5em'> <b>Time: </b>" + collisionHourNorm +":" + 
+					    	collisionMin + amPm +
+					    	"<br style='line-height: 1.5em'> <b>Reason:  </b>" + jsonData[i].contributing_factor_vehicle_1 + 
+					    	"<br style='line-height: 1.5em'> <b>No. of Injuries: </b>" + numberInjured + 
+					    	"<br style='line-height: 1.5em'> <b>Collision between </b>" + firstvehicle + 
+					    	" and " + secondvehicle)
 					    );	
 					} else {			
 					}
@@ -142,9 +211,24 @@ var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json',
 			else if(jsonData[i].borough == "BRONX") {
 				var dotColor = 'red';
 				var numberInjured = parseInt(jsonData[i].number_of_persons_injured);
-				var collisionTime = parseFloat(jsonData[i].time);
+				var collisionTime = jsonData[i].time;
+				var collisionHour = parseInt(collisionTime.split(":")[0]);
+				var collisionHourNorm = collisionHour;
+				if (collisionHour > 12) {
+					collisionHourNorm = collisionHour - 12;
+				}
+				var amPm = "AM";
+				if (collisionHour >= 12) {
+					amPm = "PM";
+				}
+				var collisionMin = collisionTime.split(":")[1];
 				var firstvehicle = jsonData[i].vehicle_type_code1;
 				var secondvehicle;
+				var collisionDate = new Date(jsonData[i].date);
+				var collisionDayOfWeek = dayNames[collisionDate.getDay()];
+				var collisionMonth = monthNames[collisionDate.getMonth()];
+				var collisionDay = collisionDate.getDate();
+				var collisionYear = collisionDate.getFullYear();
 				if(jsonData[i].vehicle_type_code2 != null) {
 					secondvehicle = jsonData[i].vehicle_type_code2;} 
 					else { secondvehicle = "UNKNOWN VEHICLE"};
@@ -171,7 +255,14 @@ var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json',
 						fillOpacity: 0.7,
 						className: "bronx-array"
 					}).addTo(nycmap)
-					    .bindPopup("<b>Reason:  </b>" + jsonData[i].contributing_factor_vehicle_1 + "<br> <b># of Injuries: </b>" + numberInjured + "<br> <b>Collision between </b>" + firstvehicle + " and " + secondvehicle + "<br> <b>Date: </b>" + jsonData[i].date + "<br> <b>Time: </b>" + collisionTime)
+					    .bindPopup("<b>Date: </b>" + 
+					    	collisionDayOfWeek + ", " + collisionMonth + " " + collisionDay + ", " +
+					    	collisionYear + "<br style='line-height: 1.5em'> <b>Time: </b>" + collisionHourNorm +":" + 
+					    	collisionMin + amPm +
+					    	"<br style='line-height: 1.5em'> <b>Reason:  </b>" + jsonData[i].contributing_factor_vehicle_1 + 
+					    	"<br style='line-height: 1.5em'> <b>No. of Injuries: </b>" + numberInjured + 
+					    	"<br style='line-height: 1.5em'> <b>Collision between </b>" + firstvehicle + 
+					    	" and " + secondvehicle)
 					    );	
 					} else {
 					}

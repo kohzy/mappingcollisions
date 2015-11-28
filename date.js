@@ -3,7 +3,8 @@ var jsonData1;
 
 //monthNames for naming max and min collision dates
 var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
-  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+];
 
 //initiate array to contain all the collisionDates
 var collisionDateArray = [];
