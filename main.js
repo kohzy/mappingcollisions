@@ -21,10 +21,6 @@ var manhattanArray = [];
 var queensArray = [];
 var bronxArray = [];
 var brooklynArray = [];
-var minCollisionDate = "min";
-var maxCollisionDate = "max";
-
-//initiate array to contain all the collisionDates
 
 
 var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json', function(data) {
