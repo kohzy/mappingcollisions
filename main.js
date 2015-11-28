@@ -15,10 +15,18 @@ var actualTileLayer = L.tileLayer.provider('Hydda.Base').addTo(nycmap);
 
 //parse the JSON Data we get from the NYC API URL
 var jsonData;
+
+//initiate arrays to contain all the markers in a particular borough
 var manhattanArray = [];
 var queensArray = [];
 var bronxArray = [];
 var brooklynArray = [];
+var minCollisionDate = "min";
+var maxCollisionDate = "max";
+
+//initiate array to contain all the collisionDates
+
+
 var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json', function(data) {
 		jsonData = data;
 
@@ -30,6 +38,7 @@ var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json',
 				var collisionTime = parseFloat(jsonData[i].time);
 				var firstvehicle = jsonData[i].vehicle_type_code1;
 				var secondvehicle;
+				var collisionDate = jsonData[i].date.slice(0,jsonData[i].date.indexOf("T"));
 				if(jsonData[i].vehicle_type_code2 != null) {
 					secondvehicle = jsonData[i].vehicle_type_code2;} 
 					else { secondvehicle = "UNKNOWN VEHICLE"};
