@@ -21,6 +21,7 @@ var manhattanArray = [];
 var queensArray = [];
 var bronxArray = [];
 var brooklynArray = [];
+var statenArray = [];
 
 //dateNames for popup date information
 var monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -77,6 +78,64 @@ var rawData = $.getJSON('https://data.cityofnewyork.us/resource/h9gi-nx95.json',
 						fillColor: dotColor,
 						fillOpacity: 0.7,
 						className: "manhattan-array"
+					}).addTo(nycmap)
+					    .bindPopup("<b>Date: </b>" + 
+					    	collisionDayOfWeek + ", " + collisionMonth + " " + collisionDay + ", " +
+					    	collisionYear + "<br style='line-height: 1.5em'> <b>Time: </b>" + collisionHourNorm +":" + 
+					    	collisionMin + amPm +
+					    	"<br style='line-height: 1.5em'> <b>Reason:  </b>" + jsonData[i].contributing_factor_vehicle_1 + 
+					    	"<br style='line-height: 1.5em'> <b>No. of Injuries: </b>" + numberInjured + 
+					    	"<br style='line-height: 1.5em'> <b>Collision between </b>" + firstvehicle + 
+					    	" and " + secondvehicle)
+					    );	
+					} else {			
+					}
+			}
+			else if(jsonData[i].borough == "STATEN ISLAND") {
+				var dotColor = 'red';
+				var numberInjured = parseInt(jsonData[i].number_of_persons_injured);
+				var collisionTime = jsonData[i].time;
+				var collisionHour = parseInt(collisionTime.split(":")[0]);
+				var collisionHourNorm = collisionHour;
+				if (collisionHour > 12) {
+					collisionHourNorm = collisionHour - 12;
+				}
+				var amPm = "AM";
+				if (collisionHour >= 12) {
+					amPm = "PM";
+				}
+				var collisionMin = collisionTime.split(":")[1];
+				var firstvehicle = jsonData[i].vehicle_type_code1;
+				var secondvehicle;
+				var collisionDate = new Date(jsonData[i].date);
+				var collisionDayOfWeek = dayNames[collisionDate.getDay()];
+				var collisionMonth = monthNames[collisionDate.getMonth()];
+				var collisionDay = collisionDate.getDate();
+				var collisionYear = collisionDate.getFullYear();
+				if(jsonData[i].vehicle_type_code2 != null) {
+					secondvehicle = jsonData[i].vehicle_type_code2;} 
+					else { secondvehicle = "UNKNOWN VEHICLE"};
+				if( numberInjured >= 2) {
+					dotColor = 'red';
+					} else if (numberInjured  == 1) {
+					dotColor = '#ff7800';
+					} else if (numberInjured  == 0) {
+					dotColor = '#ffea00';
+					}
+
+				//if data point has location data (because some data points don't have location data), load the long and lat of that entry
+				if (jsonData[i].location) {
+					var latitude = parseFloat(jsonData[i].location.latitude);
+					var longitude = parseFloat(jsonData[i].location.longitude);
+
+					//Draw that particular circle with diameter determined by numberInjured
+					statenArray.push(L.circle([ latitude,longitude],40,{
+						color: 	dotColor,
+						weight: 1,
+						opacity: 0.7,
+						fillColor: dotColor,
+						fillOpacity: 0.7,
+						className: "staten-array"
 					}).addTo(nycmap)
 					    .bindPopup("<b>Date: </b>" + 
 					    	collisionDayOfWeek + ", " + collisionMonth + " " + collisionDay + ", " +
@@ -287,6 +346,7 @@ $("#manhattanButton").click(function() {
 		&& $(".brooklyn-array").css("display") == "none"
 		&& $(".queens-array").css("display") == "none"
 		&& $(".bronx-array").css("display") == "none"
+		&& $(".staten-array").css("display") == "none"
 		) {
 		actualTileLayer.setOpacity(0.8);
 	}
@@ -294,10 +354,32 @@ $("#manhattanButton").click(function() {
 		&& $(".brooklyn-array").css("display") == "none"
 		&& $(".queens-array").css("display") == "none"
 		&& $(".bronx-array").css("display") == "none"
+		&& $(".staten-array").css("display") == "none"
 		) {	 
 		actualTileLayer.setOpacity(1);
 	}
 	$(".manhattan-array").toggle("display");
+})
+$("#statenButton").click(function() {
+	this.style.backgroundColor = this.style.backgroundColor == "white" ? "black" : "white";
+	this.style.color = this.style.color == "black" ? "white" : "black";
+	if ($(".manhattan-array").css("display") == "none"
+		&& $(".brooklyn-array").css("display") == "none"
+		&& $(".queens-array").css("display") == "none"
+		&& $(".bronx-array").css("display") == "none"
+		&& $(".staten-array").css("display") == "none"
+		) {
+		actualTileLayer.setOpacity(0.8);
+	}
+	else if ($(".manhattan-array").css("display") == "none"
+		&& $(".brooklyn-array").css("display") == "none"
+		&& $(".queens-array").css("display") == "none"
+		&& $(".bronx-array").css("display") == "none"
+		&& $(".staten-array").css("display") !== "none"
+		) {	 
+		actualTileLayer.setOpacity(1);
+	}
+	$(".staten-array").toggle("display");
 })
 $("#brooklynButton").click(function() {
 	this.style.backgroundColor = this.style.backgroundColor == "white" ? "black" : "white";
@@ -306,6 +388,7 @@ $("#brooklynButton").click(function() {
 		&& $(".brooklyn-array").css("display") == "none"
 		&& $(".queens-array").css("display") == "none"
 		&& $(".bronx-array").css("display") == "none"
+		&& $(".staten-array").css("display") == "none"
 		) {
 		actualTileLayer.setOpacity(0.8);
 	}
@@ -313,6 +396,7 @@ $("#brooklynButton").click(function() {
 		&& $(".brooklyn-array").css("display") !== "none"
 		&& $(".queens-array").css("display") == "none"
 		&& $(".bronx-array").css("display") == "none"
+		&& $(".staten-array").css("display") == "none"
 		) {	 
 		actualTileLayer.setOpacity(1);
 	}
@@ -325,6 +409,7 @@ $("#bronxButton").click(function() {
 		&& $(".brooklyn-array").css("display") == "none"
 		&& $(".queens-array").css("display") == "none"
 		&& $(".bronx-array").css("display") == "none"
+		&& $(".staten-array").css("display") == "none"
 		) {
 		actualTileLayer.setOpacity(0.8);
 	}
@@ -332,6 +417,7 @@ $("#bronxButton").click(function() {
 		&& $(".brooklyn-array").css("display") == "none"
 		&& $(".queens-array").css("display") == "none"
 		&& $(".bronx-array").css("display") !== "none"
+		&& $(".staten-array").css("display") == "none"
 		) {	 
 		actualTileLayer.setOpacity(1);
 	}
@@ -344,6 +430,7 @@ $("#queensButton").click(function() {
 		&& $(".brooklyn-array").css("display") == "none"
 		&& $(".queens-array").css("display") == "none"
 		&& $(".bronx-array").css("display") == "none"
+		&& $(".staten-array").css("display") == "none"
 		) {
 		actualTileLayer.setOpacity(0.8);
 	}
@@ -351,6 +438,7 @@ $("#queensButton").click(function() {
 		&& $(".brooklyn-array").css("display") == "none"
 		&& $(".queens-array").css("display") !== "none"
 		&& $(".bronx-array").css("display") == "none"
+		&& $(".staten-array").css("display") == "none"
 		) {	 
 		actualTileLayer.setOpacity(1);
 	}
